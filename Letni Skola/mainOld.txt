@@ -1,0 +1,193 @@
+#include <Arduino.h>
+#include <math.h> 
+#include <cudliky.hpp>
+#include <pruhy.hpp>
+#define RED 4
+#define YELLOW 16 
+#define GREEN 17
+#define R 4
+#define G 16
+#define B 17
+
+
+
+// put function declarations here:
+void Blink(int);
+void BlinkInc();
+void Blikni();
+void Blink2(int);
+void Blink2A(int, int);
+void Slope(int, int, int, int, int);
+void DeSlope(int, int, int, int, int);
+void LEDSerieCheck();
+void LEDGradualPowerUp();
+void LEDPruh1(int);
+void LEDPruh2Inf();
+bool isBtnPressed(int);
+
+void setup() {
+  pinMode(4, OUTPUT);
+  pinMode(16, OUTPUT);
+  pinMode(17, OUTPUT);
+  pinMode(2, OUTPUT);
+  pinMode(5, OUTPUT);
+  pinMode(18, OUTPUT);
+  pinMode(19, OUTPUT);
+  pinMode(21, OUTPUT);
+  pinMode(13, INPUT_PULLUP);
+  pinMode(12, INPUT_PULLUP);
+  Serial.begin(9600);
+
+};
+
+void loop() {
+  // (isBtnPressed(13) && isBtnPressed(12)) ? digitalWrite(4, 1) : digitalWrite(4, 0);
+  if(!isBtnPressed(13) && !isBtnPressed(12)){
+    digitalWrite(4, 1);
+  }
+  else{
+    digitalWrite(4, 0);
+  }
+  /*
+  delay(1000);
+  LEDPruh1(3);
+  delay(1000);
+  LEDPruh2Inf();
+  */
+
+
+  /*
+  delay(1000);
+  int i = 0;
+  for (int j = 10; j<=220; j+= 5){
+    if (j<50){
+      delay(250);
+      Blink2A(RED, j);
+      Blink2A(YELLOW, j);
+      Blink2A(GREEN, j);
+    }
+    else if (j>50){
+      j+=25;
+      delay(250);
+      Blink2A(RED, j);
+      Blink2A(YELLOW, j);
+      Blink2A(GREEN, j);
+  };
+  };
+  */
+
+  /*
+  Slope(RED, 10, 100, 50, 4);
+  analogWrite(RED, 100);
+  DeSlope(RED, 100, 10, 100, 4);
+  */
+ // Up R, Up G, Up B, Down B, 
+  /*
+  Slope(R, 0, 255, 1000, 1);
+  Slope(G, 0, 255, 1000, 1);
+  Slope(B, 0, 255, 1000, 1);
+  DeSlope(B, 255, 0, 1000, 1);
+  DeSlope(R, 255, 0, 1000, 1);
+  DeSlope(G, 255, 0, 1000, 1);
+  Slope(B, 0, 255, 1000, 1);
+  Slope(R, 0, 255, 1000, 1);
+  DeSlope(B, 255, 0, 1000, 1);
+  DeSlope(R, 255, 0, 1000, 1);
+  */
+         
+};
+
+  /*
+  digitalWrite(RED, 0);
+  delay(10);
+  digitalWrite(YELLOW, 0);
+  delay(10);
+  digitalWrite(GREEN, 0);
+  delay(1000);
+  digitalWrite(RED, 1);
+  delay(10);
+  digitalWrite(YELLOW, 1);
+  delay(10);
+  digitalWrite(GREEN, 1);
+  delay(5000);
+  BlinkInc();
+  Blink(RED);
+  Blink(YELLOW);
+  Blink(GREEN);
+  BlinkInc();
+  */
+
+
+// put function definitions here:
+void Blink(int diodeNum){
+  delay(1);
+  digitalWrite(diodeNum, 1);
+  delay(1000);
+  digitalWrite(diodeNum, 0);
+  delay(1);
+};
+
+void Blink2(int diodeNum){
+  delay(1);
+  digitalWrite(diodeNum, 1);
+  delay(50);
+  digitalWrite(diodeNum, 0);
+  delay(50);
+};
+void Blink2A(int diodeNum, int intensity){
+  delay(1);
+  analogWrite(diodeNum, intensity);
+  delay(50);
+  analogWrite(diodeNum, 0);
+  delay(50);
+};
+
+void BlinkInc(){
+  digitalWrite(RED, 0);
+  digitalWrite(YELLOW, 0);
+  digitalWrite(GREEN, 0);
+  for (int i=1; i <= 4; i++){
+  delay(30);
+  digitalWrite(RED, 1);
+  digitalWrite(YELLOW, 1);
+  digitalWrite(GREEN, 1);
+  delay(30);
+  digitalWrite(RED, 0);
+  digitalWrite(YELLOW, 0);
+  digitalWrite(GREEN, 0);
+  }
+};
+
+void Blikni (){
+  Blink(RED);
+  Blink(YELLOW);
+  Blink(GREEN);
+  Blink(YELLOW);
+  Blink(RED);
+};
+
+void Slope(int diodeNum, int min, int max, int T, int inc = 1){
+  if (max > 255){
+    max = 255;
+  };
+  for (int i = min; i <= max; i = i + inc){
+    delay(T/(inc*(max - min)));
+    analogWrite(diodeNum, i);
+  };
+};
+
+void DeSlope(int diodeNum, int max, int min, int T, int dec = 1){
+  if (max > 255){
+    max = 255;
+  };
+  for (int i = max; i >= min; i = i - dec){
+    delay(T/(dec*(max - min)));
+    analogWrite(diodeNum, i);
+  };
+};
+
+
+
+
+
+
